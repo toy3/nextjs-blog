@@ -1,10 +1,11 @@
 import Head from "next/head";
-import Layout from "../../components/layout";
 import Date from "../../components/date";
-import { getAllPostIds, getPostData } from "../../lib/posts";
+import Layout from "../../components/layout";
 import utilStyles from "../../styles/utils.module.css";
+import { GetStaticProps, GetStaticPaths } from "next";
+import { getAllPostIds, getPostData } from "../../lib/posts";
 
-export async function getStaticPaths() {
+export const getStaticPaths: GetStaticPaths = async () => {
     // 서버사이드에서 실행되는 함수이므로 콘솔은 터미널에서 확인한다.
     const paths = getAllPostIds();
     return {
@@ -13,16 +14,22 @@ export async function getStaticPaths() {
     };
 }
 
-export async function getStaticProps({ params }) {
-    const postData = await getPostData(params.id);
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+    const postData = await getPostData(params?.id as string);
     return {
         props: {
             postData,
         },
     };
-}
+};
 
-export default function Post({ postData }) {
+export default function Post({ postData }: {
+    postData: {
+        title: string
+        date: string
+        contentHtml: string
+    }
+}) {
     return (
         <Layout>
             {/* Add this <Head> tag */}

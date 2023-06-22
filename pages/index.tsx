@@ -1,23 +1,24 @@
-import Head from 'next/head';
-import Link from 'next/link';
-import Layout, { siteTitle } from '../components/layout';
-import Date from '../components/date';
-import utilStyles from '../styles/utils.module.css';
-import styles from '../styles/Home.module.css';
-import { getSortedPostsData } from '../lib/posts';
+import Head from "next/head";
+import Link from "next/link";
+import Date from "../components/date";
+import Layout, { siteTitle } from "../components/layout";
+import styles from "../styles/Home.module.css";
+import utilStyles from "../styles/utils.module.css";
+import { getSortedPostsData } from "../lib/posts";
+import { GetStaticProps } from "next";
 
 /** Static Generation 의 경우 **/
-export async function getStaticProps() {
+export const getStaticProps: GetStaticProps = async () => {
     const allPostsData = getSortedPostsData();
     return {
         props: {
             allPostsData,
         },
     };
-}
+};
 
 /** Server-side Rendering 의 경우 : context 에 요청 파라미터를 넣어줘야 함 **/
-// export async function getServerSideProps(context) {
+// export const getServerSideProps: GetServerSideProps = async (context) => {
 //     return {
 //         props: {
 //             // props for your component
@@ -25,7 +26,13 @@ export async function getStaticProps() {
 //     };
 // }
 
-export default function Home({ allPostsData }) {
+export default function Home({ allPostsData }: {
+    allPostsData: {
+        date: string
+        title: string
+        id: string
+    }[]
+}) {
   return (
       <Layout home>
         <Head>
